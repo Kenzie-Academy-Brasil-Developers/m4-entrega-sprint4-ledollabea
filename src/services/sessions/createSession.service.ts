@@ -4,8 +4,10 @@ import { User } from "../../entities/user.entity";
 import jwt from "jsonwebtoken";
 import { compareSync } from "bcryptjs";
 
-const createSessionService = async ({email, password}: IUserLogin): Promise<string> => {
+const createSessionService = async (login: IUserLogin): Promise<string> => {
   const userRepository = AppDataSource.getRepository(User);
+  const {email, password} = login;
+  console.log(login);
   const user = await userRepository.findOneBy({
     email: email
   })
@@ -16,20 +18,22 @@ const createSessionService = async ({email, password}: IUserLogin): Promise<stri
   if(!userPassword){
     throw new Error("Incorrect email or password.");
   }
+  if(user.isActive === false){
+    throw new Error("Inactive User.");
+  }
 
   const token = jwt.sign(
     {
-      email: user.email,
-      name: user.name, 
       isAdm: user.isAdm,
-      id: user.id
+      id: user.id,
+      isActive: user.isActive
     }, 
     process.env.SECRET_KEY as string, 
     {
       expiresIn: "24h", 
       subject: user.id
     });
-
+    console.log(token)
   return token;
 }
 

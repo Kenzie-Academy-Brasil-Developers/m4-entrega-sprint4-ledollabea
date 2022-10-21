@@ -48,7 +48,7 @@ const updateUserController = async (request: Request, response: Response) => {
     return response.json(updatedUser);
   } catch (error) {
     if (error instanceof Error){
-      return response.status(400).json({
+      return response.status(401).json({
         message: error.message
       });
     }
@@ -67,7 +67,7 @@ const deleteUserController = async (request: Request, response: Response) => {
     });
   } catch (error) {
     if (error instanceof Error){
-      return response.status(400).json({
+      return response.status(401).json({
         message: error.message
       });
     }

@@ -8,8 +8,8 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/login", sessionRoutes);
 
-app.listen(3001, () => {
-  console.log("Server running on Port 3001");
+app.listen(3005, () => {
+  console.log("Server running");
 });
 
 export default app;

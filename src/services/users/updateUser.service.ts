@@ -3,7 +3,7 @@ import AppDataSource from "../../data-source";
 import { User } from "../../entities/user.entity";
 import {  IUser, IUserDecoded, IUserUpdate } from "../../interfaces/users";
 
-const updateUserService = async (id: string, user: IUserDecoded, {name,email,password}: IUserUpdate):Promise<IUser> => {
+const updateUserService = async (id: string, user: IUserDecoded, update: IUserUpdate):Promise<IUser> => {
   const userRepository = AppDataSource.getRepository(User);
   const findUser = await userRepository.findOneBy({
     id: id
@@ -11,9 +11,17 @@ const updateUserService = async (id: string, user: IUserDecoded, {name,email,pas
   if (!findUser){
     throw new Error("User not found!")
   }
-  if (user.isAdm===false && id !== user.id){
-    throw new Error("Unauthorized User");
+  if (user.isAdm===false){
+    if (id !== user.id){
+      throw new Error("Unauthorized User");
+    }
+  } 
+  
+  if(update.id || update.isActive || update.isAdm){
+    throw new Error("Cannot Change this Property")
   }
+
+  const {name, email, password} = update;
   await userRepository.update(
     id, 
     {
@@ -26,7 +34,17 @@ const updateUserService = async (id: string, user: IUserDecoded, {name,email,pas
       id: id
     })
     
-    return updatedUser!;
+    const returnUser = {
+      name: updatedUser!.name,
+      email: updatedUser!.email,
+      id: updatedUser!.id,
+      isAdm: updatedUser!.isAdm,
+      isActive: updatedUser!.isActive,
+      createdAt: updatedUser!.createdAt,
+      updatedAt: updatedUser!.updatedAt
+  }
+
+    return returnUser;
 }
 
 export default updateUserService;

@@ -19,7 +19,8 @@ const authMiddleware = (request: Request, response: Response, next: NextFunction
 
     request.user = {
       id: decoded.id,
-      isAdm: decoded.isAdm
+      isAdm: decoded.isAdm,
+      isActive: decoded.isActive
     }
     
     return next();

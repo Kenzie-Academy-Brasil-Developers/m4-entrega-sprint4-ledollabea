@@ -36,4 +36,9 @@ export interface IUserUpdate {
     name?: string
     email?: string
     password?: string
+    id?: string
+    isAdm?: boolean
+    createdAt?: Date
+    updatedAt?: Date
+    isActive?: boolean
 }

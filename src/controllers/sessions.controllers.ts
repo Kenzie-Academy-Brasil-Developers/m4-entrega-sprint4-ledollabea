@@ -7,8 +7,8 @@ const createSessionController = async (request: Request, response: Response) =>{
     const token = await createSessionService(login);
     return response.json({token});
   } catch (error) {
-    if (error instanceof Error){
-      return response.status(400).json({message: error.message});
+    if(error instanceof Error){
+      return response.status(403).json({message: error.message});
     }
   }
 
