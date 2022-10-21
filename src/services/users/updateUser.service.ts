@@ -17,7 +17,13 @@ const updateUserService = async (id: string, user: IUserDecoded, update: IUserUp
     }
   } 
   
-  if(update.id || update.isActive || update.isAdm){
+  if(update.id){
+    throw new Error("Cannot Change this Property")
+  }
+  if(update.isActive != undefined){
+    throw new Error("Cannot Change this Property")
+  }
+  if(update.isAdm != undefined){
     throw new Error("Cannot Change this Property")
   }
 
